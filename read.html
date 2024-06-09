@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Overflow Read</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+  <div class="container" style="max-width: 600px; margin: 50px auto; padding: 20px;">
+    <h1 style="color: #007bff; margin-bottom: 20px;">Overflow Read</h1>
+    <p style="color: #333; font-size: 16px; margin-bottom: 20px;">Enter a key below set from the overflow read application and enter it here to set a timer.</p>
+    <input type="text" id="keyInput" placeholder="Enter key" style="padding: 10px; border: none; border-radius: 5px; width: calc(70% - 10px); font-size: 16px;">
+    <button onclick="submitKey()" style="padding: 10px 20px; border: none; border-radius: 5px; background-color: #007bff; color: white; font-size: 16px; cursor: pointer; transition: background-color 0.3s ease;">Submit</button>
+    <div id="countdowns" style="margin-top: 20px;"></div>
+  </div>
+
+  <script>
+    function submitKey() {
+      const keyInput = document.getElementById('keyInput');
+      const key = keyInput.value.trim();
+      if (key === '') {
+          alert('Please paste a valid key');
+          return;
+      }
+
+      parseKeyAndSetTimers(key);
+    }
+
+    function parseKeyAndSetTimers(key) {
+      const countdownsContainer = document.getElementById('countdowns');
+      countdownsContainer.innerHTML = ''; // Clear previous countdowns
+
+      const sessions = key.split(',');
+      sessions.forEach(sessionStr => {
+          const sessionParts = sessionStr.split('@');
+          const label = sessionParts[0];
+          const dateTimeStr = sessionParts[1];
+          const [dateStr, timeStr] = dateTimeStr.split('.');
+          const [month, day, year] = dateStr.split('/');
+          const [hour, minute] = timeStr.split(':');
+
+          // Convert date and time strings into JavaScript Date object
+          const date = new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute));
+
+          // Set up timer for the session
+          const countdownContainer = document.createElement('div');
+          const countdownLabel = document.createElement('span');
+          countdownLabel.textContent = `${label}: `;
+          const countdownDisplay = document.createElement('span');
+          countdownContainer.appendChild(countdownLabel);
+          countdownContainer.appendChild(countdownDisplay);
+          countdownsContainer.appendChild(countdownContainer);
+
+          function updateCountdown() {
+              const now = new Date();
+              const timeDiff = Math.max(date - now, 0); // Ensure timeDiff is not negative
+              if (timeDiff <= 0) {
+                  clearInterval(countdownInterval);
+                  countdownContainer.remove(); // Remove countdown display
+                  playSound(); // Play sound
+              } else {
+                  const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+                  const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                  const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+                  countdownDisplay.textContent = `${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+              }
+          }
+
+          // Update countdown immediately
+          updateCountdown();
+
+          // Update countdown every second
+          const countdownInterval = setInterval(updateCountdown, 1000);
+      });
+    }
+
+    // Helper function to pad single-digit numbers with leading zero
+    function pad(num) {
+      return num < 10 ? '0' + num : num;
+    }
+
+    function playSound() {
+      let audio = new Audio('IMG_4972.m4a');
+      audio.play();
+    }
+  </script>
+</body>
+</html>
