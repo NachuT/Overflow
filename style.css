@@ -1,0 +1,135 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f4f4f4;
+    color: #333;
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 10;
+}
+
+.read-button {
+    padding: 10px 20px;
+    background-color: #0f2fd2;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    width: 100px;
+}
+
+.read-button:hover {
+    background-color: #0519ad;
+}
+.get-key {
+    padding: 10px 20px;
+    background-color: #33d1ce;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    width: 20px;
+    background-image: url('key.png');
+    background-size: contain; 
+    background-repeat: no-repeat; */
+    background-position: center;  
+}
+
+.get-key:hover {
+    background-color: #39aac0;
+}
+
+.blocks-container {
+    display: flex;
+    justify-content: center; /* Center the blocks */
+    align-items: center; /* Vertically center the blocks */
+    flex-grow: 1;
+}
+
+.block {
+    width: 100px;
+    height: 100px;
+    margin: 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    user-select: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-radius: 25px;
+
+}
+
+.block:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.canvas {
+    position: absolute;
+    top: 140px; /* Adjust based on header height */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px dashed #ccc;
+    overflow: hidden;
+    background: #fff;
+}
+
+.session {
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    position: fixed;
+    bottom: 20px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+input,
+select,
+button {
+    padding: 10px;
+    margin: 10px 0;
+    width: 80%;
+    box-sizing: border-box;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
