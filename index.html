@@ -1,0 +1,63 @@
+<<!DOCTYPE html>
+<html ng-app="OverflowCreate">
+<head>
+    <meta charset="UTF-8">
+    <title>Study Schedule Planner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body ng-controller="MainController">
+    <div class="header">
+        <!-- Move the button inside the header -->
+        <button class="read-button" onclick="window.location.href='read.html'">Go to Read Page</button>
+        <button class=get-key ng-click="copyToClipboard(generateKey())"></button>
+        <!-- Blocks -->
+        <div class="blocks-container">
+            <div class="block" ng-repeat="block in blocks" ng-style="{'background-color': block.color}" 
+                id="block-{{$index}}" ng-mousedown="startDrag($event, $index)" ng-dblclick="expandBlock($event, block)">
+                {{block.label}}
+                <div class="edit-panel" ng-show="block.isExpanded">
+                    <input type="text" ng-model="block.title" placeholder="Edit title" ng-blur="updateBlock(block)">
+                    <input type="text" ng-model="block.description" placeholder="Edit description" ng-blur="updateBlock(block)">
+                    <select ng-model="block.time" ng-options="time for time in timeOptions"></select>
+                    <button ng-click="deleteBlock(block)">Delete</button>
+                    <button ng-click="updateBlock(block)">Update Block</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h1 class="title">Overflow Read</h1>
+    <p class="explanation">Overflow Read is a study schedule planner that helps you organize your study sessions efficiently. Simply add your study blocks and sessions to create a personalized study schedule.</p>
+
+    <div class="canvas" id="canvas">
+        <div ng-repeat="session in sessions" class="session" id="session-{{$index}}" 
+            ng-style="{'background-color': session.color, 'left': session.position.left + 'px', 'top': session.position.top + 'px'}"
+            ng-dblclick="editSession(session)">
+            <span ng-if="!session.isEditing">{{session.label}} - {{session.date | date:'shortDate'}} at {{session.time}}</span>
+            <div ng-if="session.isEditing">
+                <input type="text" ng-model="session.label" placeholder="Edit label">
+                <input type="date" ng-model="session.date">
+                <select ng-model="session.time" ng-options="time for time in timeOptions"></select>
+                <button ng-click="editSession(session)">Done</button>
+                <button class="delete-btn" ng-click="deleteSession(session)" ng-show="session.isEditing">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form to add/edit sessions -->
+    <form ng-submit="addOrUpdateSession()" ng-if="isEditing">
+        <input type="date" ng-model="newSession.date" required>
+        <select ng-model="newSession.time" required>
+            <option ng-repeat="time in timeOptions" value="{{time}}">{{time}}</option>
+        </select>
+        <input type="text" ng-model="newSession.label" placeholder="Description" required>
+        <button type="submit">{{isEditing ? 'Update' : 'Add'}} Session</button>
+    </form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular/12.2.17/core.umd.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.11/interact.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leader-line/1.0.7/leader-line.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
